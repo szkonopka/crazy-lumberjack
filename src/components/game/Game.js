@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import Lumberjack from '../lumberjack/Lumberjack.js';
 import './Game.css';
 
+const KEYS = {
+    W: 87,
+    A: 65,
+    S: 83,
+    D: 68,
+};
+
 class Game extends Component
 {
     constructor()
@@ -13,7 +20,13 @@ class Game extends Component
                 height: window.innerHeight
             },
             context: null,
-            score: 0
+            score: 0,
+            keyMap: {
+                W: false,
+                A: false,
+                S: false,
+                D: false
+            }
         };
         this.player = [];
         this.enemy = [];
@@ -23,6 +36,9 @@ class Game extends Component
     componentDidMount()
     {
         window.addEventListener('resize', this.windowResizing);
+        //window.addEventListener('mousemove', this.keyHandler.bind(this));
+        window.addEventListener('keydown', this.keyHandler.bind(this, true));
+        window.addEventListener('keyup', this.keyHandler.bind(this, false));
 
         const context = this.refs.canvas.getContext('2d');
         this.setState( {context: context} );
@@ -76,6 +92,19 @@ class Game extends Component
         }
     }
 
+    keyHandler(keyState, e)
+    {
+        let keyMap = this.state.keyMap;
+        if(e.keyCode === KEYS.W) keyMap.W = keyState;
+        if(e.keyCode === KEYS.A) keyMap.A = keyState;
+        if(e.keyCode === KEYS.S) keyMap.S = keyState;
+        if(e.keyCode === KEYS.D) keyMap.D = keyState;
+
+        this.setState({
+            keyMap: keyMap
+        });
+    }
+
     initLumberjack()
     {
         let lumberjack = new Lumberjack({
@@ -86,8 +115,6 @@ class Game extends Component
             create: this.createElement.bind(this)
             
         });
-        window.addEventListener('mousemove', (e) => { lumberjack.rotate(e) });
-        window.addEventListener('keydown', (e) => { lumberjack.move(e) });
         this.createElement(lumberjack, 'player');
     }
 
@@ -115,3 +142,4 @@ class Game extends Component
 };
 
 export default Game;
+
