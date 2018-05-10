@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Scene from '../scene/Scene.js';
 import Lumberjack from '../lumberjack/Lumberjack.js';
 import './Game.css';
 
@@ -29,6 +30,7 @@ class Game extends Component
             }
         };
         this.player = [];
+        this.scene = [];
         this.enemy = [];
         this.bullets = [];
     }
@@ -54,9 +56,9 @@ class Game extends Component
         context.save();
 
         context.fillStyle = '#fff';
-        context.globalAlpha = 1.0;
-        context.fillRect(0, 0, this.state.display.width, this.state.display.height);
         context.globalAlpha = 1;
+        context.fillRect(0, 0, this.state.display.width, this.state.display.height);
+        //context.globalAlpha = 1;
 
         this.player[0].render(this.state);
 
@@ -75,6 +77,7 @@ class Game extends Component
 
     initGame()
     {
+        this.initScene();
         this.initLumberjack();
     }
 
@@ -102,6 +105,11 @@ class Game extends Component
         this.setState({
             keyMap: keyMap
         });
+    }
+
+    initScene() {
+      let scene = new Scene();
+      this.createElement(scene, 'scene');
     }
 
     initLumberjack()

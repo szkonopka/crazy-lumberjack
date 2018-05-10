@@ -1,5 +1,5 @@
 export default class Sprite {
-	constructor(rows, cols, frameHeight, frameWidth, sheetSrc)
+	constructor(rows, cols, frameHeight, frameWidth, sheetSrc, frameRate)
 	{
 		this.rows = rows;
 		this.cols = cols;
@@ -8,10 +8,12 @@ export default class Sprite {
 		this.frames = [];
 		this.currentFrame = 0;
 		this.currentFrameRow = 0;
-
 		this.sheet = new Image(sheetSrc);
 		this.sheet.src = sheetSrc;
 		this.initFrames();
+		this.counter = 0;
+		this.frameRate = frameRate;
+		this.secondsPerFrame = frameRate / (rows * cols);
 	}
 
 	initFrames() {
@@ -25,18 +27,41 @@ export default class Sprite {
 		}
 	}
 
-	updateFrame(context, x, y) {
+	moveRight() {
 		this.currentFrame = ++this.currentFrame % this.cols;
 
 		if(this.currentFrameRow >= this.rows) {
 			this.currentFrameRow = 0;
 		}
-		context.clearRect(x, y, this.frameWidth, this.frameHeight);
+	}
+
+	moveLeft() {
+
+	}
+
+	stay() {
+		this.currentFrame = 0;
+	}
+
+	updateFrame(context, x, y, direction) {
+		if(this.counter > this.secondsPerFrame) {
+			switch(direction) {
+				case 'right':
+					this.moveRight();
+					break;
+				default:
+					this.stay();
+					break;
+			}
+			context.clearRect(x, y, this.frameWidth, this.frameHeight);
+			this.counter = 0;
+		}
+		this.counter++;
 	}
 
 
-	drawSprite(context, x, y, rotation) {
-		this.updateFrame(context, x, y);
+	drawSprite(context, x, y, rotation, direction) {
+		this.updateFrame(context, x, y, direction);
 		context.drawImage(
 			this.sheet,
 			this.frames[this.currentFrameRow][this.currentFrame].srcX,
