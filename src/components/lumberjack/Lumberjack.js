@@ -21,7 +21,7 @@ class Lumberjack
         this.maxHP = 100;
         this.currentHP = 100;
         this.create = args.create;
-				this.sprite = new Sprite(1, 5, 280, 227, "https://i.imgur.com/oMkuTx3.png", 60);
+				this.sprite = new Sprite(1, 7, 125, 160, "https://i.imgur.com/BSwKP7G.png", 60);
         this.currentDirection = '';
     }
 
@@ -45,13 +45,20 @@ class Lumberjack
 				this.run();
         if(keyMap.W) {
           this.position.y -= this.speed;
+					this.currentDirection = 'up';
         }
 
-        if(keyMap.A)
-            this.position.x -= this.speed;
+        if(keyMap.A) {
 
-        if(keyMap.S)
-            this.position.y += this.speed;
+					this.position.x -= this.speed;
+					this.currentDirection = 'left';
+				}
+
+        if(keyMap.S) {
+					this.position.y += this.speed;
+					this.currentDirection = 'down';
+				}
+
 
         if(keyMap.D) {
           this.position.x += this.speed;
@@ -71,10 +78,12 @@ class Lumberjack
 
     render(state)
     {
-        const keyMap = state.keyMap;
+				const context = state.context;
+				context.save();
+
+				const keyMap = state.keyMap;
         this.move(keyMap, state);
-        const context = state.context;
-        context.save();
+
 				this.sprite.drawSprite(context, this.position.x, this.position.y, this.rotation, this.currentDirection);
 				context.restore();
     }

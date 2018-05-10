@@ -13,7 +13,8 @@ export default class Sprite {
 		this.initFrames();
 		this.counter = 0;
 		this.frameRate = frameRate;
-		this.secondsPerFrame = frameRate / (rows * cols);
+		this.secondsPerFrame = frameRate / (rows * cols * 2);
+		this.invertSheet = false;
 	}
 
 	initFrames() {
@@ -28,7 +29,20 @@ export default class Sprite {
 	}
 
 	moveRight() {
-		this.currentFrame = ++this.currentFrame % this.cols;
+		// this.currentFrame = ++this.currentFrame % this.cols;
+
+		if(this.currentFrame < this.cols - 1 && !this.invertSheet) {
+			this.currentFrame = ++this.currentFrame;
+		} else {
+			this.invertSheet = true;
+			this.currentFrame--;
+			if(this.currentFrame < 0) {
+				this.invertSheet = false;
+				this.currentFrame = 0;
+			}
+		}
+
+		console.log(this.currentFrame);
 
 		if(this.currentFrameRow >= this.rows) {
 			this.currentFrameRow = 0;
