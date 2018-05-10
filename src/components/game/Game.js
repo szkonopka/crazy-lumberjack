@@ -42,10 +42,9 @@ class Game extends Component
 
         const context = this.refs.canvas.getContext('2d');
         this.setState( {context: context} );
-        
-        this.initGame();
 
-        requestAnimationFrame(() => { this.update() });
+        this.initGame();
+				requestAnimationFrame(() => { this.update() });
     }
 
     update()
@@ -55,7 +54,7 @@ class Game extends Component
         context.save();
 
         context.fillStyle = '#fff';
-        context.globalAlpha = 0.4;
+        context.globalAlpha = 1.0;
         context.fillRect(0, 0, this.state.display.width, this.state.display.height);
         context.globalAlpha = 1;
 
@@ -63,7 +62,7 @@ class Game extends Component
 
         this.updateElements(this.player, 'player');
         context.restore();
-        requestAnimationFrame(() => { this.update() });        
+        requestAnimationFrame(() => { this.update() });
     }
 
     windowResizing()
@@ -79,7 +78,7 @@ class Game extends Component
         this.initLumberjack();
     }
 
-    createElement(object, group) 
+    createElement(object, group)
     {
         this[group].push(object);
     }
@@ -112,8 +111,9 @@ class Game extends Component
                 x: this.state.display.width / 2,
                 y: this.state.display.height / 2
             },
-            create: this.createElement.bind(this)
-            
+            create: this.createElement.bind(this),
+						state: this.state
+
         });
         this.createElement(lumberjack, 'player');
     }
@@ -132,7 +132,7 @@ class Game extends Component
     {
         return (
             <div className="crazy-lumberjack">
-                <canvas className="game-canvas" 
+                <canvas className="game-canvas"
                 width={this.state.display.width}
                 height={this.state.display.height}
                 ref="canvas"/>
@@ -142,4 +142,3 @@ class Game extends Component
 };
 
 export default Game;
-

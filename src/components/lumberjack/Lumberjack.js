@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+// import React, { Component } from 'react';
 import './Lumberjack.css'
+import Sprite from '../sprite/Sprite.js'
 
 class Lumberjack
 {
@@ -16,6 +17,7 @@ class Lumberjack
         this.maxHP = 100;
         this.currentHP = 100;
         this.create = args.create;
+				this.sprite = new Sprite(1, 5, 280, 227, "https://i.imgur.com/oMkuTx3.png");
     }
 
     rotate(e)
@@ -26,8 +28,14 @@ class Lumberjack
         this.rotation = Math.atan2(differenceY, differenceX) * 360 / (Math.PI * 2);
     }
 
+		run()
+		{
+
+		}
+
     move(keyMap, state)
     {
+				this.run();
         if(keyMap.W)
             this.position.y -= this.speed;
 
@@ -44,7 +52,7 @@ class Lumberjack
             this.position.x = 0;
         if(this.position.x < 0)
             this.position.x = state.display.width - 25;
-        
+
         if(this.position.y - 25 > state.display.height)
             this.position.y = 0;
         if(this.position.y < 0)
@@ -52,17 +60,18 @@ class Lumberjack
     }
 
     render(state)
-    {  
+    {
         const keyMap = state.keyMap;
         this.move(keyMap, state);
 
         const context = state.context;
         context.save();
-        context.translate(this.position.x, this.position.y);
-        context.rotate(this.rotation * 180 / Math.PI);
-        context.fillStyle = "#000000";
-        context.fillRect(-25, -25, 50, 50);
-        context.restore();
+        //context.translate(this.position.x, this.position.y);
+        //context.rotate(this.rotation * 180 / Math.PI);
+        //context.fillStyle = "#000000";
+        //context.fillRect(-25, -25, 50, 50);
+				this.sprite.drawSprite(context, this.position.x, this.position.y, this.rotation);
+				context.restore();
     }
 };
 
